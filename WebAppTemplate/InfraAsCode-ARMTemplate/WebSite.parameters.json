@@ -5,7 +5,7 @@
     "hostingPlanName": {
       "value": "sp-armtemplate"
     },
-    "webSiteName":{
+    "siteName":{
       "value": "wa-armtemplate"
     }
   }

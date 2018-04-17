@@ -4,6 +4,9 @@
   "parameters": {
     "hostingPlanName": {
       "value": "sp-armtemplate"
+    },
+    "webSiteName":{
+      "value": "wa-armtemplate"
     }
   }
 }

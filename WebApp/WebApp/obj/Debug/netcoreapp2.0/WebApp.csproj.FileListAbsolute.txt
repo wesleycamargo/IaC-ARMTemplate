@@ -1,0 +1,11 @@
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\bin\Debug\netcoreapp2.0\WebApp.deps.json
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\bin\Debug\netcoreapp2.0\WebApp.runtimeconfig.json
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\bin\Debug\netcoreapp2.0\WebApp.runtimeconfig.dev.json
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\bin\Debug\netcoreapp2.0\WebApp.dll
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\bin\Debug\netcoreapp2.0\WebApp.pdb
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\obj\Debug\netcoreapp2.0\WebApp.csprojResolveAssemblyReference.cache
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\obj\Debug\netcoreapp2.0\WebApp.csproj.CoreCompileInputs.cache
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\obj\Debug\netcoreapp2.0\WebApp.AssemblyInfoInputs.cache
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\obj\Debug\netcoreapp2.0\WebApp.AssemblyInfo.cs
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\obj\Debug\netcoreapp2.0\WebApp.dll
+E:\Repositorio\github\wes\IaC-ARMTemplate\WebApp\WebApp\obj\Debug\netcoreapp2.0\WebApp.pdb

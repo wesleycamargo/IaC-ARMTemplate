@@ -1,0 +1,170 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "stgiacType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
+    },
+    "vm-IaCName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "vm-IaCAdminUserName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "vm-IaCAdminPassword": {
+      "type": "securestring"
+    },
+    "vm-IaCWindowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [
+        "2008-R2-SP1",
+        "2012-Datacenter",
+        "2012-R2-Datacenter",
+        "Windows-Server-Technical-Preview"
+      ]
+    }},
+  "variables": {
+    "stgiacName": "[concat('stgiac', uniqueString(resourceGroup().id))]",
+    "vnet-iacPrefix": "10.0.0.0/16",
+    "vnet-iacSubnet1Name": "Subnet-1",
+    "vnet-iacSubnet1Prefix": "10.0.0.0/24",
+    "vnet-iacSubnet2Name": "Subnet-2",
+    "vnet-iacSubnet2Prefix": "10.0.1.0/24",
+    "vm-IaCImagePublisher": "MicrosoftWindowsServer",
+    "vm-IaCImageOffer": "WindowsServer",
+    "vm-IaCOSDiskName": "vm-IaCOSDisk",
+    "vm-IaCVmSize": "Standard_D2_v2",
+    "vm-IaCVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'vnet-iac')]",
+    "vm-IaCSubnetRef": "[concat(variables('vm-IaCVnetID'), '/subnets/', variables('vnet-iacSubnet1Name'))]",
+    "vm-IaCStorageAccountContainerName": "vhds",
+    "vm-IaCNicName": "[concat(parameters('vm-IaCName'), 'NetworkInterface')]"},
+  "resources": [
+    {
+      "name": "[variables('stgiacName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-01-01",
+      "sku": {
+        "name": "[parameters('stgiacType')]"
+      },
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "stgiac"
+      },
+      "kind": "Storage"
+    },
+    {
+      "name": "vnet-iac",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "vnet-iac"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('vnet-iacPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('vnet-iacSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[variables('vnet-iacSubnet1Prefix')]"
+            }
+          },
+          {
+            "name": "[variables('vnet-iacSubnet2Name')]",
+            "properties": {
+              "addressPrefix": "[variables('vnet-iacSubnet2Prefix')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[variables('vm-IaCNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet-iac')]"
+      ],
+      "tags": {
+        "displayName": "vm-IaCNic"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('vm-IaCSubnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[parameters('vm-IaCName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('stgiacName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('vm-IaCNicName'))]"
+      ],
+      "tags": {
+        "displayName": "vm-IaC"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('vm-IaCVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('vm-IaCName')]",
+          "adminUsername": "[parameters('vm-IaCAdminUsername')]",
+          "adminPassword": "[parameters('vm-IaCAdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('vm-IaCImagePublisher')]",
+            "offer": "[variables('vm-IaCImageOffer')]",
+            "sku": "[parameters('vm-IaCWindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "vm-IaCOSDisk",
+            "vhd": {
+              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', variables('stgiacName')), '2016-01-01').primaryEndpoints.blob, variables('vm-IaCStorageAccountContainerName'), '/', variables('vm-IaCOSDiskName'), '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('vm-IaCNicName'))]"
+            }
+          ]
+        }
+      }
+    }],
+  "outputs": {}
+}

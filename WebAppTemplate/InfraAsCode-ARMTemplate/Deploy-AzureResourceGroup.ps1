@@ -13,10 +13,6 @@ Param(
     [switch] $ValidateOnly
 )
 
-function SelectSubscription {
-    Write-Host "Selecting subscription '$subscriptionId'";
-    Select-AzureRmSubscription -SubscriptionID $subscriptionId;
-}
 
 function Login {
     # sign in

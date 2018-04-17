@@ -1,8 +1,8 @@
 #Requires -Version 3.0
 
 Param(
-    [string] [Parameter(Mandatory=$true)] $ResourceGroupLocation,
-    [string] $ResourceGroupName = 'InfraAsCode-ARMTemplate',
+    [string] [Parameter(Mandatory = $true)] $ResourceGroupLocation,
+    [string] $ResourceGroupName = 'RG-InfraAsCode-ARMTemplate',
     [switch] $UploadArtifacts,
     [string] $StorageAccountName,
     [string] $StorageContainerName = $ResourceGroupName.ToLowerInvariant() + '-stageartifacts',
@@ -13,9 +13,28 @@ Param(
     [switch] $ValidateOnly
 )
 
+function SelectSubscription {
+    Write-Host "Selecting subscription '$subscriptionId'";
+    Select-AzureRmSubscription -SubscriptionID $subscriptionId;
+}
+
+function Login {
+    # sign in
+    Write-Host "Logging in...";
+    $AzureUserName = Read-Host "Enter your user"
+    $SecurePassword = Read-Host -AsSecureString "Enter your password"
+    $cred = new-object -typename System.Management.Automation.PSCredential `
+        -argumentlist $AzureUserName, $SecurePassword
+    Login-AzureRmAccount -Credential $cred
+    
+}
+
+Login
+
 try {
-    [Microsoft.Azure.Common.Authentication.AzureSession]::ClientFactory.AddUserAgent("VSAzureTools-$UI$($host.name)".replace(' ','_'), '3.0.0')
-} catch { }
+    [Microsoft.Azure.Common.Authentication.AzureSession]::ClientFactory.AddUserAgent("VSAzureTools-$UI$($host.name)".replace(' ', '_'), '3.0.0')
+}
+catch { }
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version 3
@@ -59,7 +78,7 @@ if ($UploadArtifacts) {
         $StorageAccountName = 'stage' + ((Get-AzureRmContext).Subscription.SubscriptionId).Replace('-', '').substring(0, 19)
     }
 
-    $StorageAccount = (Get-AzureRmStorageAccount | Where-Object{$_.StorageAccountName -eq $StorageAccountName})
+    $StorageAccount = (Get-AzureRmStorageAccount | Where-Object {$_.StorageAccountName -eq $StorageAccountName})
 
     # Create the storage account if it doesn't already exist
     if ($StorageAccount -eq $null) {
@@ -85,7 +104,7 @@ if ($UploadArtifacts) {
     # Generate a 4 hour SAS token for the artifacts location if one was not provided in the parameters file
     if ($OptionalParameters[$ArtifactsLocationSasTokenName] -eq $null) {
         $OptionalParameters[$ArtifactsLocationSasTokenName] = ConvertTo-SecureString -AsPlainText -Force `
-            (New-AzureStorageContainerSASToken -Container $StorageContainerName -Context $StorageAccount.Context -Permission r -ExpiryTime (Get-Date).AddHours(4))
+        (New-AzureStorageContainerSASToken -Container $StorageContainerName -Context $StorageAccount.Context -Permission r -ExpiryTime (Get-Date).AddHours(4))
     }
 }
 
@@ -94,9 +113,9 @@ New-AzureRmResourceGroup -Name $ResourceGroupName -Location $ResourceGroupLocati
 
 if ($ValidateOnly) {
     $ErrorMessages = Format-ValidationOutput (Test-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceGroupName `
-                                                                                  -TemplateFile $TemplateFile `
-                                                                                  -TemplateParameterFile $TemplateParametersFile `
-                                                                                  @OptionalParameters)
+            -TemplateFile $TemplateFile `
+            -TemplateParameterFile $TemplateParametersFile `
+            @OptionalParameters)
     if ($ErrorMessages) {
         Write-Output '', 'Validation returned the following errors:', @($ErrorMessages), '', 'Template is invalid.'
     }
@@ -106,12 +125,12 @@ if ($ValidateOnly) {
 }
 else {
     New-AzureRmResourceGroupDeployment -Name ((Get-ChildItem $TemplateFile).BaseName + '-' + ((Get-Date).ToUniversalTime()).ToString('MMdd-HHmm')) `
-                                       -ResourceGroupName $ResourceGroupName `
-                                       -TemplateFile $TemplateFile `
-                                       -TemplateParameterFile $TemplateParametersFile `
-                                       @OptionalParameters `
-                                       -Force -Verbose `
-                                       -ErrorVariable ErrorMessages
+        -ResourceGroupName $ResourceGroupName `
+        -TemplateFile $TemplateFile `
+        -TemplateParameterFile $TemplateParametersFile `
+        @OptionalParameters `
+        -Force -Verbose `
+        -ErrorVariable ErrorMessages
     if ($ErrorMessages) {
         Write-Output '', 'Template deployment returned the following errors:', @(@($ErrorMessages) | ForEach-Object { $_.Exception.Message.TrimEnd("`r`n") })
     }

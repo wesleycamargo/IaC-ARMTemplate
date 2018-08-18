@@ -50,50 +50,6 @@
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
             },
             "resources": []
-        }
-        // {
-        //     "comments": "Generalized from resource: '/subscriptions/a928ee33-003b-4e69-b464-a9e1165f3219/resourceGroups/testewes/providers/Microsoft.Web/sites/testewes'.",
-        //     "type": "Microsoft.Web/sites",
-        //     "kind": "app",
-        //     "name": "[parameters('sites_testewes_name')]",
-        //     "apiVersion": "2016-08-01",
-        //     "location": "Central US",
-        //     "scale": null,
-        //     "properties": {
-        //         "enabled": true,
-        //         "hostNameSslStates": [
-        //             {
-        //                 "name": "[concat(parameters('sites_testewes_name'),'.azurewebsites.net')]",
-        //                 "sslState": "Disabled",
-        //                 "virtualIP": null,
-        //                 "thumbprint": null,
-        //                 "toUpdate": null,
-        //                 "hostType": "Standard"
-        //             },
-        //             {
-        //                 "name": "[concat(parameters('sites_testewes_name'),'.scm.azurewebsites.net')]",
-        //                 "sslState": "Disabled",
-        //                 "virtualIP": null,
-        //                 "thumbprint": null,
-        //                 "toUpdate": null,
-        //                 "hostType": "Repository"
-        //             }
-        //         ],
-        //         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ServicePlandf3c2071_a5cc_name'))]",
-        //         "reserved": false,
-        //         "siteConfig": null,
-        //         "scmSiteAlsoStopped": false,
-        //         "hostingEnvironmentProfile": null,
-        //         "clientAffinityEnabled": true,
-        //         "clientCertEnabled": false,
-        //         "hostNamesDisabled": false,
-        //         "containerSize": 0,
-        //         "dailyMemoryTimeQuota": 0,
-        //         "cloningInfo": null
-        //     },
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ServicePlandf3c2071_a5cc_name'))]"
-        //     ]
-        // }        
+        }        
     ]
 }

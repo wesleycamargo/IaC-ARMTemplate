@@ -7,9 +7,6 @@
         },
         "serverfarms_ServicePlandf3c2071_a5cc_name": {
             "value": "sp-InfraASCode"
-        },
-        "hostNameBindings_testewes.azurewebsites.net_name": {
-            "value": "InfraASCodeDemo.azurewebsites.net"
         }
     }
 }

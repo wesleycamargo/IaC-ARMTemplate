@@ -9,10 +9,6 @@
         "serverfarms_ServicePlandf3c2071_a5cc_name": {
             "defaultValue": "ServicePlandf3c2071-a5cc",
             "type": "String"
-        },
-        "hostNameBindings_testewes.azurewebsites.net_name": {
-            "defaultValue": "testewes.azurewebsites.net",
-            "type": "String"
         }
     },
     "variables": {},
@@ -87,22 +83,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ServicePlandf3c2071_a5cc_name'))]"
             ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/a928ee33-003b-4e69-b464-a9e1165f3219/resourceGroups/testewes/providers/Microsoft.Web/sites/testewes/hostNameBindings/testewes.azurewebsites.net'.",
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "name": "[concat(parameters('sites_testewes_name'), '/', parameters('hostNameBindings_testewes.azurewebsites.net_name'))]",
-            "apiVersion": "2016-08-01",
-            "location": "Central US",
-            "scale": null,
-            "properties": {
-                "siteName": "testewes",
-                "domainId": null,
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_testewes_name'))]"
-            ]
-        }
+        }        
     ]
 }

@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_testewes_name": {
-            "value": null
+            "value": "wa-InfraASCode"
         },
         "serverfarms_ServicePlandf3c2071_a5cc_name": {
-            "value": null
+            "value": "sp-InfraASCode"
         },
         "hostNameBindings_testewes.azurewebsites.net_name": {
-            "value": null
+            "value": "InfraASCodeDemo.azurewebsites.net"
         }
     }
 }

@@ -1,11 +1,11 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
+    "webSiteName": {
         "sites_testewes_name": {
             "value": "wa-InfraASCode"
         },
-        "serverfarms_ServicePlandf3c2071_a5cc_name": {
+        "hostingPlanName": {
             "value": "sp-InfraASCode"
         }
     }
